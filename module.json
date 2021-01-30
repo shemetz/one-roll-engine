@@ -24,5 +24,14 @@
     }
   ],
   "manifestPlusVersion": "1.0.0",
-  "media": []
+  "media": [
+    {
+      "type": "screenshot",
+      "url": "https://raw.githubusercontent.com/itamarcu/one-roll-engine/master/metadata/screenshot_1_from_chat_7d.png"
+    },
+    {
+      "type": "cover",
+      "url": "https://raw.githubusercontent.com/itamarcu/one-roll-engine/master/metadata/cover.png"
+    }
+  ]
 }
