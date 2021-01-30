@@ -3,7 +3,7 @@
   "title": "One Roll Engine",
   "description": "Allows rolling d10s and getting sets, with the /ore command",
   "author": "shem",
-  "version": "0.1",
+  "version": "0.1.1",
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "esmodules": [
