@@ -103,9 +103,9 @@ const parseRawRoll = (rawRolls, flavorText) => {
  * @param {ORERollResult} rollResult
  */
 const getContentFromRollResult = async (rollResult) => {
-  const {sets, looseDice, flavorText} = rollResult
+  const { sets, looseDice, flavorText } = rollResult
   return await renderTemplate(`modules/one-roll-engine/templates/ore-roll.html`, {
-    sets, looseDice, flavorText,
+    sets, looseDice, flavorText
   })
 }
 
