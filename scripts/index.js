@@ -1,9 +1,14 @@
+export const MODULE_NAME = 'one-roll-engine'
+
+const HOOK_CLICK_SET = 'one-roll-engine clickSet'
+const HOOK_CLICK_LOOSE_DIE = 'one-roll-engine clickLooseDie'
+
 /*
  * Parse and roll dice when users type `/ore 6d10` and similar syntax
  */
 Hooks.on('chatMessage', (_, messageText, data) => {
   if (messageText !== undefined && messageText.startsWith(`/ore`)) {
-    oreRollFromChatMessage(messageText, data)
+    rollFromChatMessageOreCommand(messageText, data)
     return false
   } else {
     return true
@@ -18,11 +23,19 @@ Hooks.on('renderChatLog', () => {
   chatLog.on('click', '.ore-set-roll', (event) => {
     event.preventDefault()
     const setsDiv = event.currentTarget
+    if (event.ctrlKey || event.shiftKey) {
+      const hookCallAnswer = Hooks.call(HOOK_CLICK_SET, event)
+      if (hookCallAnswer === false) return
+    }
     setsDiv.style.outline = setsDiv.style.outline === 'dashed' ? 'none' : 'dashed'
   })
   chatLog.on('click', '.ore-single-roll.loose', (event) => {
     event.preventDefault()
     const looseDieDiv = event.currentTarget
+    if (event.ctrlKey || event.shiftKey) {
+      const hookCallAnswer = Hooks.call(HOOK_CLICK_LOOSE_DIE, event)
+      if (hookCallAnswer === false) return
+    }
     if (event.altKey) {
       const startingValue = parseInt(looseDieDiv.dataset.value)
       const currentValue = parseInt(looseDieDiv.style.backgroundImage.match(/(\d+)\.png/)[1])
@@ -35,16 +48,16 @@ Hooks.on('renderChatLog', () => {
   })
 })
 
-Hooks.on('init', () => {
-  game.oneRollEngine = ORE
-})
-
-const oreRollFromChatMessage = async (messageText, data) => {
+/**
+ * @param {string} messageText
+ * @param {object} data
+ */
+const rollFromChatMessageOreCommand = async (messageText, data) => {
   let match = messageText.match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
-  if (!match) return errorParsing(messageText)
+  if (!match) return errorParsingOreCommand(messageText)
   const rollPart = match[1], flavorText = match[2]
   match = rollPart.match(new RegExp(`^([0-9]+)d?1?0?$`))
-  if (!match) return errorParsing(messageText)
+  if (!match) return errorParsingOreCommand(messageText)
   const diceCount = match[1]
   const rolls = createRawRoll(diceCount)
   const rollResult = parseRawRoll(rolls, flavorText)
@@ -52,17 +65,19 @@ const oreRollFromChatMessage = async (messageText, data) => {
   return ChatMessage.create(data, {})
 }
 
-const errorParsing = (messageText) => {
+const errorParsingOreCommand = (messageText) => {
   ui.notifications.error(
     `<div>Failed parsing your command:</div>
     <div><p style="font-family: monospace">${messageText}</p></div>
-    <div>Try instead: <p style="font-family: monospace">/ore 7d #blah</p></div>`
+    <div>Try instead: <p style="font-family: monospace">/ore 7d #blah</p></div>`,
   )
   return null
 }
 
 /**
  * returns an array, e.g. [2, 10, 5, 6, 5, 5, 3, 1, 1, 8]
+ *
+ * @param {number} diceCount
  */
 const createRawRoll = (diceCount) => {
   return new Roll(`${diceCount}d10`).roll().terms[0].results.map(r => r.result)
@@ -123,7 +138,7 @@ const parseRawRoll = (rawRolls, flavorText) => {
 const getContentFromRollResult = async (rollResult) => {
   const { sets, looseDice, flavorText } = rollResult
   return await renderTemplate(`modules/one-roll-engine/templates/ore-roll.html`, {
-    sets, looseDice, flavorText
+    sets, looseDice, flavorText,
   })
 }
 
@@ -131,4 +146,15 @@ const ORE = {
   createRawRoll,
   parseRawRoll,
   getContentFromRollResult,
+  hooks: {
+    HOOK_CLICK_SET,
+    HOOK_CLICK_LOOSE_DIE,
+  },
 }
+
+Hooks.on('init', () => {
+  game.oneRollEngine = ORE
+  // if you're reading this code and planning to use this module in macros/systems - I suggest doing:
+  //
+  //     const ORE = game.oneRollEngine
+})
