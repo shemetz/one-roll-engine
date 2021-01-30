@@ -14,10 +14,24 @@ Hooks.on('chatMessage', (_, messageText, data) => {
  * Toggle dashed outline of sets, when clicked
  */
 Hooks.on('renderChatLog', () => {
-  $('#chat-log').on('click', '.ore-set-roll', (event) => {
+  const chatLog = $('#chat-log')
+  chatLog.on('click', '.ore-set-roll', (event) => {
     event.preventDefault()
     const setsDiv = event.currentTarget
     setsDiv.style.outline = setsDiv.style.outline === 'dashed' ? 'none' : 'dashed'
+  })
+  chatLog.on('click', '.ore-single-roll.loose', (event) => {
+    event.preventDefault()
+    const looseDieDiv = event.currentTarget
+    if (event.altKey) {
+      const startingValue = parseInt(looseDieDiv.dataset.value)
+      const currentValue = parseInt(looseDieDiv.style.backgroundImage.match(/(\d+)\.png/)[1])
+      let newValue = currentValue - 1
+      if (newValue === 0) newValue = `loose_${startingValue}`
+      looseDieDiv.style.backgroundImage = `url("modules/one-roll-engine/images/dice/d10_${newValue}.png")`
+    } else {
+      looseDieDiv.style.outline = looseDieDiv.style.outline === 'dashed' ? 'none' : 'dashed'
+    }
   })
 })
 
