@@ -1,0 +1,19 @@
+<div class="one-roll-engine-dice-roll">
+    {{#if flavorText}}
+    <span class="ore-flavor-text">{{flavorText}}</span>
+    {{/if}}
+    <div class="ore-sets">
+        {{#each sets}}
+        <div class="ore-set-roll" data-width="{{width}}" data-height="{{height}}">
+            {{#each rollsInSet}}
+            <img class="ore-single-roll" src="modules/one-roll-engine/images/dice/d10_{{this}}.png" alt="{{this}}"/>
+            {{/each}}
+        </div>
+        {{/each}}
+    </div>
+    <div class="ore-loose-dice">
+        {{#each looseDiceRolls}}
+        <img class="ore-single-roll" src="modules/one-roll-engine/images/dice/d10_loose_{{this}}.png" alt="{{this}}"/>
+        {{/each}}
+    </div>
+</div>
