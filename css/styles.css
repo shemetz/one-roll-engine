@@ -13,22 +13,26 @@
 
 .one-roll-engine-dice-roll .ore-loose-dice {
     display: inline-flex;
+    vertical-align: super;
 }
 
-.one-roll-engine-dice-roll img {
+.one-roll-engine-dice-roll .ore-single-roll {
     border: 1px solid transparent;
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100%;
-    height: 40px;
-    width: 40px;
     -webkit-appearance: none;
     appearance: none;
     outline: none;
     margin: 0;
 }
 
-.one-roll-engine-dice-roll .ore-single-roll-loose {
+.one-roll-engine-dice-roll .ore-single-roll.in-set {
+    height: 40px;
+    width: 40px;
+}
+
+.one-roll-engine-dice-roll .ore-single-roll.loose {
     flex: 0 0 30px;
     width: 30px;
     height: 30px;

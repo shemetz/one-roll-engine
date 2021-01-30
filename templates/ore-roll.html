@@ -6,14 +6,18 @@
         {{#each sets}}
         <div class="ore-set-roll" data-width="{{width}}" data-height="{{height}}">
             {{#each rollsInSet}}
-            <img class="ore-single-roll" src="modules/one-roll-engine/images/dice/d10_{{this}}.png" alt="{{this}}"/>
+            <div class="ore-single-roll in-set" data-value="{{this}}"
+                 style="background-image: url('modules/one-roll-engine/images/dice/d10_{{this}}.png')">
+            </div>
             {{/each}}
         </div>
         {{/each}}
     </div>
     <div class="ore-loose-dice">
-        {{#each looseDiceRolls}}
-        <img class="ore-single-roll" src="modules/one-roll-engine/images/dice/d10_loose_{{this}}.png" alt="{{this}}"/>
+        {{#each looseDice}}
+        <div class="ore-single-roll loose" data-value="{{this}}"
+             style="background-image: url('modules/one-roll-engine/images/dice/d10_loose_{{this}}.png')">
+        </div>
         {{/each}}
     </div>
 </div>
