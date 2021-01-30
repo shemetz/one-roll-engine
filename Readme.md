@@ -50,3 +50,8 @@ Loose dice can be alt-clicked to
 make them go down, by 1 each time, until it goes below 1 and returns to its original value.
 
 ![screenshot 3](https://raw.githubusercontent.com/itamarcu/one-roll-engine/master/metadata/screenshot_3_selections.png)
+
+
+## License
+
+The One Roll Engine is published by Greg Stolze (http://gregstolze.com/) and licensed under Creative Commons Attribution-Share Alike 2.0.
