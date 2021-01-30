@@ -26,12 +26,12 @@ Hooks.on('init', () => {
 })
 
 const oreRollFromChatMessage = async (messageText, data) => {
-  const matches = messageText
-    .match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
-  if (!matches) return errorParsing(messageText)
-  const rollPart = matches[1], flavorText = matches[2]
-  const diceCount = rollPart.match(new RegExp(`^([0-9]+)d?1?0?$`))[1]
-  if (!diceCount) return errorParsing(messageText)
+  let match = messageText.match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
+  if (!match) return errorParsing(messageText)
+  const rollPart = match[1], flavorText = match[2]
+  match = rollPart.match(new RegExp(`^([0-9]+)d?1?0?$`))
+  if (!match) return errorParsing(messageText)
+  const diceCount = match[1]
   const rolls = createRawRoll(diceCount)
   const rollResult = parseRawRoll(rolls, flavorText)
   data.content = await getContentFromRollResult(rollResult)
@@ -39,7 +39,11 @@ const oreRollFromChatMessage = async (messageText, data) => {
 }
 
 const errorParsing = (messageText) => {
-  ui.notifications.error(`Failed parsing ORE command: \n${messageText}`)
+  ui.notifications.error(
+    `<div>Failed parsing your command:</div>
+    <div><p style="font-family: monospace">${messageText}</p></div>
+    <div>Try instead: <p style="font-family: monospace">/ore 7d #blah</p></div>`
+  )
   return null
 }
 
