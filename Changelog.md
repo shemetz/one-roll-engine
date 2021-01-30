@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a changelog
 - Added this line to the changelog
 - Fixed leftover problems with base functionality
+- Added ability to alt-click loose dice (useful for Awesome)
 
 ## 0.1 - 2021-01-30
 - Created the module
