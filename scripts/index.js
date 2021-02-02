@@ -59,9 +59,11 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   match = rollPart.match(new RegExp(`^([0-9]+)d?1?0?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const diceCount = match[1]
-  const rolls = createRawRoll(diceCount)
-  const rollResult = parseRawRoll(rolls, flavorText)
+  const roll = createRawRoll(diceCount)
+  const rollResult = parseRawRoll(roll, flavorText)
   data.content = await getContentFromRollResult(rollResult)
+  data.type = CHAT_MESSAGE_TYPES.ROLL
+  data.roll = roll
   return ChatMessage.create(data, {})
 }
 
@@ -75,12 +77,16 @@ const errorParsingOreCommand = (messageText) => {
 }
 
 /**
- * returns an array, e.g. [2, 10, 5, 6, 5, 5, 3, 1, 1, 8]
+ * returns a Foundry Roll object.
+ *
+ * To get the array of results:
+ *
+ * roll.terms[0].results.map(r => r.result)    will returns an array, e.g. [2, 10, 5, 6, 5, 5, 3, 1, 1, 8]
  *
  * @param {number} diceCount
  */
 const createRawRoll = (diceCount) => {
-  return new Roll(`${diceCount}d10`).roll().terms[0].results.map(r => r.result)
+  return new Roll(`${diceCount}d10`).roll()
 }
 
 /**
@@ -101,16 +107,17 @@ const createRawRoll = (diceCount) => {
  */
 
 /**
- * @param {number[]} rawRolls - e.g. [1, 2, 4, 2, 10, 2, 1]
+ * @param roll - a Foundry Roll object that has been rolled
  * @param {string} flavorText - e.g. "Flaming sword attack"
  * @returns {ORERollResult}
  */
-const parseRawRoll = (rawRolls, flavorText) => {
+const parseRawRoll = (roll, flavorText) => {
+  const rawRolls = roll.terms[0].results.map(r => r.result)
   const counts = new Array(11).fill(0)  // [0, 1, ..., 9, 10].  the 0 is not used
-  for (const k of rawRolls) {
+  rawRolls.forEach(k => {
     counts[k] += 1
-  }
-  const sets = {}
+  })
+  const sets = {}  // key = height, value = width
   const looseDice = []
   counts.forEach((count, num) => {
     if (count === 0) return  // (will also skip the "0" count)
