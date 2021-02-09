@@ -64,6 +64,7 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   data.content = await getContentFromRollResult(rollResult)
   data.type = CHAT_MESSAGE_TYPES.ROLL
   data.roll = roll
+  data.flags = { core: { canPopout: true } }
   return ChatMessage.create(data, {})
 }
 
