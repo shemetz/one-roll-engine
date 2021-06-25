@@ -87,7 +87,7 @@ const errorParsingOreCommand = (messageText) => {
  * @param {number} diceCount
  */
 const createRawRoll = (diceCount) => {
-  return new Roll(`${diceCount}d10`).roll()
+  return new Roll(`${diceCount}d10`).roll({ async: false })
 }
 
 /**
@@ -165,4 +165,5 @@ Hooks.on('init', () => {
   // if you're reading this code and planning to use this module in macros/systems - I suggest doing:
   //
   //     const ORE = game.oneRollEngine
+  console.log(`${MODULE_NAME} | Initialized.`)
 })

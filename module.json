@@ -7,7 +7,7 @@
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "esmodules": [
-    "scripts/index.js"
+    "scripts/one_roll_engine.js"
   ],
   "styles": ["css/styles.css"],
   "url": "https://github.com/itamarcu/one-roll-engine",
