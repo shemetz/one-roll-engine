@@ -3,6 +3,7 @@
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/itamarcu/one-roll-engine?style=for-the-badge) 
 ![GitHub Releases](https://img.shields.io/github/downloads/itamarcu/one-roll-engine/latest/total?style=for-the-badge) 
 ![GitHub All Releases](https://img.shields.io/github/downloads/itamarcu/one-roll-engine/total?style=for-the-badge&label=Downloads+total)  
+![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/one-roll-engine/raw/master/module.json)
 
 One Roll Engine is a Foundry VTT module, based on the [One-Roll Engine](https://en.wikipedia.org/wiki/One-Roll_Engine) (O.R.E) 
 generic TTRPG system.  This basic system is used for games such as Wild Talents, Monsters and Other Childish Things, 
