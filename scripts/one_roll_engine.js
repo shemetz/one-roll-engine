@@ -57,16 +57,20 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   let match = messageText.match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const rollPart = match[1], flavorText = match[2]
-  match = rollPart.match(new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?(?:[eEhH])?([1-9]|10)?$`))
+  match = rollPart.match(new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const diceCount = match[1]
   let expertCount = 0
   let expertValue = 10
-  if (match[2]) {
-    expertCount = match[2]
-  }
   if (match[3]) {
-    expertValue = match[3]
+    if (match[2]) {
+      expertCount = match[2]
+    } else {
+      expertCount = 1
+    }
+    if (match[4]) {
+      expertValue = match[4]
+    }
   }
   const roll = createRawRoll(diceCount)
   const rollResult = parseRawRoll(roll, expertCount, expertValue, flavorText)
@@ -138,10 +142,6 @@ const parseRawRoll = (roll, expertCount, expertValue, flavorText) => {
     if (count === 1) looseDice.push(num)
     if (count >= 2) sets[num] = count
   })
-  /*const masterDice = []
-  for (let i = 0; i < masterCount; i++) {
-    masterDice.push(10) 
-  }*/
   return {
     rawRolls,
     flavorText,

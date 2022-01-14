@@ -53,6 +53,14 @@ make them go down, by 1 each time, until it goes below 1 and returns to its orig
 ![screenshot 3](https://raw.githubusercontent.com/itamarcu/one-roll-engine/master/metadata/screenshot_3_selections.png)
 
 
+### Expert/Hard Dice
+
+Expert/hard dice can be added using the syntax /ore 5d 1e6.
+
+The 'e' can be replaced with 'E', 'h', or 'H'. If you don't put in the first number (e.g. /ore 5d e1) then the number of dice will default to 1. If you don't put in the second number (e.g. /ore 5d 1e), then the dice will default to 10.
+
+The expert/hard dice will be added to the normal roll, becoming part of sets or loose dice as normal.
+
 ## License
 
 The One Roll Engine is published by Greg Stolze (http://gregstolze.com/) and licensed under Creative Commons Attribution-Share Alike 2.0.
