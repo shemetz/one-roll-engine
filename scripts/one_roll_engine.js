@@ -3,6 +3,7 @@ export const MODULE_NAME = 'one-roll-engine'
 const HOOK_CLICK_SET = 'one-roll-engine clickSet'
 const HOOK_CLICK_LOOSE_DIE = 'one-roll-engine clickLooseDie'
 
+
 /*
  * Parse and roll dice when users type `/ore 6d10` and similar syntax
  */
@@ -56,11 +57,19 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   let match = messageText.match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const rollPart = match[1], flavorText = match[2]
-  match = rollPart.match(new RegExp(`^([0-9]+)d?1?0?$`))
+  match = rollPart.match(new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?(?:[eEhH])?([1-9]|10)?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const diceCount = match[1]
+  let expertCount = 0
+  let expertValue = 10
+  if (match[2]) {
+    expertCount = match[2]
+  }
+  if (match[3]) {
+    expertValue = match[3]
+  }
   const roll = createRawRoll(diceCount)
-  const rollResult = parseRawRoll(roll, flavorText)
+  const rollResult = parseRawRoll(roll, expertCount, expertValue, flavorText)
   data.content = await getContentFromRollResult(rollResult)
   data.type = CONST.CHAT_MESSAGE_TYPES.ROLL
   data.roll = roll
@@ -72,7 +81,7 @@ const errorParsingOreCommand = (messageText) => {
   ui.notifications.error(
     `<div>Failed parsing your command:</div>
     <div><p style="font-family: monospace">${messageText}</p></div>
-    <div>Try instead: <p style="font-family: monospace">/ore 7d #blah</p></div>`,
+    <div>Try instead: <p style="font-family: monospace">/ore 7d 6e9 #blah</p></div>`,
   )
   return null
 }
@@ -112,10 +121,14 @@ const createRawRoll = (diceCount) => {
  * @param {string} flavorText - e.g. "Flaming sword attack"
  * @returns {ORERollResult}
  */
-const parseRawRoll = (roll, flavorText) => {
+const parseRawRoll = (roll, expertCount, expertValue, flavorText) => {
   const rawRolls = roll.terms[0].results.map(r => r.result)
+  const expertRolls = new Roll(`${expertCount}d${expertValue}`).roll({ async: false, maximize: true }).terms[0].results.map(r => r.result)
   const counts = new Array(11).fill(0)  // [0, 1, ..., 9, 10].  the 0 is not used
   rawRolls.forEach(k => {
+    counts[k] += 1
+  })
+  expertRolls.forEach(k => {
     counts[k] += 1
   })
   const sets = {}  // key = height, value = width
@@ -125,6 +138,10 @@ const parseRawRoll = (roll, flavorText) => {
     if (count === 1) looseDice.push(num)
     if (count >= 2) sets[num] = count
   })
+  /*const masterDice = []
+  for (let i = 0; i < masterCount; i++) {
+    masterDice.push(10) 
+  }*/
   return {
     rawRolls,
     flavorText,
