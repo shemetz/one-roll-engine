@@ -66,18 +66,41 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   
   const flavorTextRegEx = new RegExp('^(.*?)(?:\\s*%\\s*([^]+)?)?$');
   match = flavorText?.match(flavorTextRegEx);
-  const flavorPreText = match ? match[1] : undefined, flavorPostText = match ? match[2] : undefined;
+  let flavorPreText, flavorPostText;
+  if (match) {
+    flavorPreText = match[1];
+    flavorPostText = match[2];
+  }
 
-  const rollPartRegEx = new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?\\s*?([1-9])?([wW])?$`);
-  match = rollPart.match(rollPartRegEx);
+  const mainRollRegEx = new RegExp(`^(?:\{@([^}]+)\}|([0-9]+))(?:d?1?0?\s*)(.*)$`);
+  match = rollPart.match(mainRollRegEx);
   if (!match) return errorParsingOreCommand(messageText);
-  
-  const diceCount = match[1];
+
+  let actorAttribute;
+  if (match[1]) {
+    const controlledTokens = canvas.tokens.controlled;
+      if (controlledTokens.length != 1) {
+        return ui.notifications.warn("Select ONE token only");
+      }
+    actorAttribute = controlledTokens[0].actor.data.data.attributes[match[1]].value;
+  }
+  const diceCount = actorAttribute || match[2];
+
+  const expertWigglePart = match[3];
+  const expertWigglePartRegEx = new RegExp(`^(?:\{@([^}]+)\}|([0-9]+))?([eEhH])?([1-9|10]+)?\s*?(.*)$`);
+  match = expertWigglePart.trimStart().match(expertWigglePartRegEx);
+  if (!match) return errorParsingOreCommand(messageText);
+
   let expertCount = 0;
   let expertValue = 10;
-  let wiggleDie = 0;
   if (match[3]) {
-    if (match[2]) {
+    if (match[1]) {
+      const controlledTokens = canvas.tokens.controlled;
+      if (controlledTokens.length != 1) {
+        return ui.notifications.warn("Select ONE token only");
+      }
+      expertCount = controlledTokens[0].actor.data.data.attributes[match[1]].value;    
+    } else if (match[2]) {
       expertCount = match[2];
     } else {
       expertCount = 1;
@@ -86,9 +109,25 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
       expertValue = match[4];
     }
   }
-  if (match[6]) {
-    wiggleDie = match[5];
+
+  const wigglePart = match[5];
+  const wigglePartRegEx = new RegExp(`^(?:\{@([^}]+)\}|([0-9]+))?([wW])?$`);
+  match = wigglePart.trimStart().match(wigglePartRegEx);
+  if (!match) return errorParsingOreCommand(messageText);
+  
+  let wiggleDie = 0;
+  if (match[3]){
+    if (match[1]) {
+      const controlledTokens = canvas.tokens.controlled;
+        if (controlledTokens.length != 1) {
+          return ui.notifications.warn("Select ONE token only");
+        }
+      wiggleDie = controlledTokens[0].actor.data.data.attributes[match[1]].value;
+    } else {
+      wiggleDie = match[2];
+    }
   }
+
   const roll = createRawRoll(diceCount);
   const rollResult = parseRawRoll(roll, expertCount, expertValue, wiggleDie, flavorPreText, flavorPostText);
   data.content = await getContentFromRollResult(rollResult);
@@ -97,6 +136,7 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   data.flags = { core: { canPopout: true } };
   return ChatMessage.create(data, {});
 }
+
 
 const errorParsingOreCommand = (messageText) => {
   ui.notifications.error(
