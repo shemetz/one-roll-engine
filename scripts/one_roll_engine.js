@@ -47,6 +47,11 @@ Hooks.on('renderChatLog', () => {
       looseDieDiv.style.outline = looseDieDiv.style.outline === 'dashed' ? 'none' : 'dashed'
     }
   })
+  chatLog.on('click', '.ore-wiggle-apply', (event) => {
+    event.preventDefault();
+    const wiggleApplySpan = event.currentTarget;
+    console.log("DID IT")
+  });
 })
 
 /**
@@ -54,31 +59,37 @@ Hooks.on('renderChatLog', () => {
  * @param {object} data
  */
 const rollFromChatMessageOreCommand = async (messageText, data) => {
-  let match = messageText.match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
-  if (!match) return errorParsingOreCommand(messageText)
-  const rollPart = match[1], flavorText = match[2]
-  match = rollPart.match(new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?$`))
-  if (!match) return errorParsingOreCommand(messageText)
-  const diceCount = match[1]
-  let expertCount = 0
-  let expertValue = 10
+  const chatStartRegEx = new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`);
+  let match = messageText.match(chatStartRegEx);
+  if (!match) return errorParsingOreCommand(messageText);
+  const rollPart = match[1], flavorText = match[2];
+  const rollPartRegEx = new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?\\s*?([1-9])?([wW])?$`);
+  match = rollPart.match(rollPartRegEx);
+  if (!match) return errorParsingOreCommand(messageText);
+  const diceCount = match[1];
+  let expertCount = 0;
+  let expertValue = 10;
+  let wiggleDie = 0;
   if (match[3]) {
     if (match[2]) {
-      expertCount = match[2]
+      expertCount = match[2];
     } else {
-      expertCount = 1
+      expertCount = 1;
     }
     if (match[4]) {
-      expertValue = match[4]
+      expertValue = match[4];
+    }
+    if (match[6]) {
+      wiggleDie = match[5];
     }
   }
-  const roll = createRawRoll(diceCount)
-  const rollResult = parseRawRoll(roll, expertCount, expertValue, flavorText)
-  data.content = await getContentFromRollResult(rollResult)
-  data.type = CONST.CHAT_MESSAGE_TYPES.ROLL
-  data.roll = roll
-  data.flags = { core: { canPopout: true } }
-  return ChatMessage.create(data, {})
+  const roll = createRawRoll(diceCount);
+  const rollResult = parseRawRoll(roll, expertCount, expertValue, wiggleDie, flavorText);
+  data.content = await getContentFromRollResult(rollResult);
+  data.type = CONST.CHAT_MESSAGE_TYPES.ROLL;
+  data.roll = roll;
+  data.flags = { core: { canPopout: true } };
+  return ChatMessage.create(data, {});
 }
 
 const errorParsingOreCommand = (messageText) => {
@@ -125,7 +136,7 @@ const createRawRoll = (diceCount) => {
  * @param {string} flavorText - e.g. "Flaming sword attack"
  * @returns {ORERollResult}
  */
-const parseRawRoll = (roll, expertCount, expertValue, flavorText) => {
+const parseRawRoll = (roll, expertCount, expertValue, wiggleDie, flavorText) => {
   const rawRolls = roll.terms[0].results.map(r => r.result)
   const expertRolls = new Roll(`${expertCount}d${expertValue}`).roll({ async: false, maximize: true }).terms[0].results.map(r => r.result)
   const counts = new Array(11).fill(0)  // [0, 1, ..., 9, 10].  the 0 is not used
@@ -154,6 +165,7 @@ const parseRawRoll = (roll, expertCount, expertValue, flavorText) => {
         rollsInSet: new Array(s[1]).fill(s[0]),
       })),
     looseDice,
+    wiggleDie,
   }
 }
 
@@ -161,9 +173,9 @@ const parseRawRoll = (roll, expertCount, expertValue, flavorText) => {
  * @param {ORERollResult} rollResult
  */
 const getContentFromRollResult = async (rollResult) => {
-  const { sets, looseDice, flavorText } = rollResult
+  const { sets, looseDice, wiggleDie, flavorText } = rollResult
   return await renderTemplate(`modules/one-roll-engine/templates/ore-roll.html`, {
-    sets, looseDice, flavorText,
+    sets, looseDice, wiggleDie, flavorText,
   })
 }
 
