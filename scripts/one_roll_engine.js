@@ -85,9 +85,9 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
     if (match[4]) {
       expertValue = match[4];
     }
-    if (match[6]) {
-      wiggleDie = match[5];
-    }
+  }
+  if (match[6]) {
+    wiggleDie = match[5];
   }
   const roll = createRawRoll(diceCount);
   const rollResult = parseRawRoll(roll, expertCount, expertValue, wiggleDie, flavorPreText, flavorPostText);
