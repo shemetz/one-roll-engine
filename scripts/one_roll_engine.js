@@ -59,13 +59,19 @@ Hooks.on('renderChatLog', () => {
  * @param {object} data
  */
 const rollFromChatMessageOreCommand = async (messageText, data) => {
-  const chatStartRegEx = new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?(?:\\s*%\\s*([^]+)?)$`);
+  const chatStartRegEx = new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`);
   let match = messageText.match(chatStartRegEx);
   if (!match) return errorParsingOreCommand(messageText);
-  const rollPart = match[1], flavorPreText = match[2], flavorPostText = match[3];
+  const rollPart = match[1], flavorText = match[2];
+  
+  const flavorTextRegEx = new RegExp('^(.*?)(?:\\s*%\\s*([^]+)?)?$');
+  match = flavorText?.match(flavorTextRegEx);
+  const flavorPreText = match ? match[1] : undefined, flavorPostText = match ? match[2] : undefined;
+
   const rollPartRegEx = new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?\\s*?([1-9])?([wW])?$`);
   match = rollPart.match(rollPartRegEx);
   if (!match) return errorParsingOreCommand(messageText);
+  
   const diceCount = match[1];
   let expertCount = 0;
   let expertValue = 10;
