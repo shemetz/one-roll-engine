@@ -59,10 +59,10 @@ Hooks.on('renderChatLog', () => {
  * @param {object} data
  */
 const rollFromChatMessageOreCommand = async (messageText, data) => {
-  const chatStartRegEx = new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`);
+  const chatStartRegEx = new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?(?:\\s*%\\s*([^]+)?)$`);
   let match = messageText.match(chatStartRegEx);
   if (!match) return errorParsingOreCommand(messageText);
-  const rollPart = match[1], flavorText = match[2];
+  const rollPart = match[1], flavorPreText = match[2], flavorPostText = match[3];
   const rollPartRegEx = new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?\\s*?([1-9])?([wW])?$`);
   match = rollPart.match(rollPartRegEx);
   if (!match) return errorParsingOreCommand(messageText);
@@ -84,7 +84,7 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
     }
   }
   const roll = createRawRoll(diceCount);
-  const rollResult = parseRawRoll(roll, expertCount, expertValue, wiggleDie, flavorText);
+  const rollResult = parseRawRoll(roll, expertCount, expertValue, wiggleDie, flavorPreText, flavorPostText);
   data.content = await getContentFromRollResult(rollResult);
   data.type = CONST.CHAT_MESSAGE_TYPES.ROLL;
   data.roll = roll;
@@ -136,7 +136,7 @@ const createRawRoll = (diceCount) => {
  * @param {string} flavorText - e.g. "Flaming sword attack"
  * @returns {ORERollResult}
  */
-const parseRawRoll = (roll, expertCount, expertValue, wiggleDie, flavorText) => {
+const parseRawRoll = (roll, expertCount, expertValue, wiggleDie, flavorPreText, flavorPostText) => {
   const rawRolls = roll.terms[0].results.map(r => r.result)
   const expertRolls = new Roll(`${expertCount}d${expertValue}`).roll({ async: false, maximize: true }).terms[0].results.map(r => r.result)
   const counts = new Array(11).fill(0)  // [0, 1, ..., 9, 10].  the 0 is not used
@@ -155,7 +155,8 @@ const parseRawRoll = (roll, expertCount, expertValue, wiggleDie, flavorText) => 
   })
   return {
     rawRolls,
-    flavorText,
+    flavorPreText,
+    flavorPostText,
     sets: Object.entries(sets)
       .map(s => [parseInt(s[0], 10), s[1]])
       .sort((s1, s2) => s1[0] - s2[0])
@@ -173,9 +174,9 @@ const parseRawRoll = (roll, expertCount, expertValue, wiggleDie, flavorText) => 
  * @param {ORERollResult} rollResult
  */
 const getContentFromRollResult = async (rollResult) => {
-  const { sets, looseDice, wiggleDie, flavorText } = rollResult
+  const { sets, looseDice, wiggleDie, flavorPreText, flavorPostText } = rollResult
   return await renderTemplate(`modules/one-roll-engine/templates/ore-roll.html`, {
-    sets, looseDice, wiggleDie, flavorText,
+    sets, looseDice, wiggleDie, flavorPreText, flavorPostText,
   })
 }
 
