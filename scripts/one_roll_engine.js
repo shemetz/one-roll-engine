@@ -49,8 +49,18 @@ Hooks.on('renderChatLog', () => {
   })
   chatLog.on('click', '.ore-wiggle-apply', (event) => {
     event.preventDefault();
-    const wiggleApplySpan = event.currentTarget;
-    console.log("DID IT")
+    const wiggleDieValue = event.currentTarget.parentElement.querySelector("select[name='wiggleDie']").value;
+
+    let wiggleDieCurrent = event.currentTarget.parentElement.querySelector("span[data-id='wiggleDieCurrent']");
+    const updatedWiggleDie = parseInt(wiggleDieCurrent.innerHTML, 10) - 1;
+    wiggleDieCurrent.innerHTML = updatedWiggleDie;
+
+    // Update the chat message so that these changes persist
+    const chatMessageElement = event.currentTarget.closest(".chat-message");
+    const chatMessageElementContent = chatMessageElement.querySelector(".one-roll-engine-dice-roll").outerHTML;
+    const chatMessageId = chatMessageElement.attributes[1].value;
+    const chatMessage = game.messages.get(chatMessageId);
+    chatMessage.update({ content: chatMessageElementContent });
   });
 })
 
