@@ -1,22 +1,18 @@
 {
   "name": "one-roll-engine",
   "title": "One Roll Engine",
-  "description": "Allows rolling d10s and getting sets, with the /ore command",
+  "description": "Allows rolling d10s and getting sets, with the /ore command. This is a fork made specifically for yoshiFanX with some additional features (see Readme.md)",
   "author": "shem",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "minimumCoreVersion": "0.7.9",
-  "compatibleCoreVersion": "0.8.8",
+  "compatibleCoreVersion": "9",
   "esmodules": [
     "scripts/one_roll_engine.js"
   ],
   "styles": ["css/styles.css"],
-  "url": "https://github.com/itamarcu/one-roll-engine",
-  "manifest": "https://github.com/itamarcu/one-roll-engine/raw/master/module.json",
-  "download": "https://github.com/itamarcu/one-roll-engine/archive/master.zip",
-  "readme": "https://github.com/itamarcu/one-roll-engine/blob/master/Readme.md",
-  "changelog": "https://github.com/itamarcu/one-roll-engine/blob/master/Changelog.md",
-  "license": "https://github.com/itamarcu/one-roll-engine/blob/master/License.txt",
-  "bugs": "https://github.com/itamarcu/one-roll-engine/issues",
+  "url": "https://github.com/jalensailin/one-roll-engine-for-yoshiFanX",
+  "manifest": "https://github.com/jalensailin/one-roll-engine-for-yoshiFanX/raw/master/module.json",
+  "download": "https://github.com/jalensailin/one-roll-engine-for-yoshiFanX/archive/master.zip",
   "authors": [
     {
       "name": "shem",
@@ -27,6 +23,12 @@
     {
       "name": "aantia",
       "email": "agjantia@gmail.com"
+    },
+    {
+      "name": "jalensailin",
+      "email": "jalen.michalslevy@gmail.com",
+      "discord": "jalensailin#1177",
+      "reddit": "u/jalensailin"
     }
   ],
   "manifestPlusVersion": "1.0.0",

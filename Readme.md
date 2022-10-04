@@ -5,6 +5,11 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/itamarcu/one-roll-engine/total?style=for-the-badge&label=Downloads+total)  
 ![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/one-roll-engine/raw/master/module.json)
 
+## NOTE: This is a fork made specifically for yoshifanx:
+ This adds flavor post-text (text displayed after the roll), the ability to reference actor attributes when rolling in chat, and support for wiggle dice. There will also be a couple of sample macros included. This was made under the MIT license.
+
+<hr>
+
 One Roll Engine is a Foundry VTT module, based on the [One-Roll Engine](https://en.wikipedia.org/wiki/One-Roll_Engine) (O.R.E) 
 generic TTRPG system.  This basic system is used for games such as Wild Talents, Monsters and Other Childish Things, 
 and The Velvet Book. 
