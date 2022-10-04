@@ -38,3 +38,12 @@
     height: 30px;
 }
 
+.ore-wiggle-apply {
+    border: 1px solid darkred;
+    padding: 3px
+}
+
+.ore-wiggle-apply:hover {
+    text-shadow: 2px 2px 5px darkred;
+}
+

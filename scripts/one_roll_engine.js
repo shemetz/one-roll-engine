@@ -49,14 +49,53 @@ Hooks.on('renderChatLog', () => {
   })
   chatLog.on('click', '.ore-wiggle-apply', (event) => {
     event.preventDefault();
+    const chatMessageElement = event.currentTarget.closest(".chat-message");
     const wiggleDieValue = event.currentTarget.parentElement.querySelector("select[name='wiggleDie']").value;
 
+    // Add wiggle die to existing div
+    const oreSetMatch = chatMessageElement.querySelector(`.ore-set-roll[data-height='${wiggleDieValue}']`); // Does this roll have a set that matches our wiggle die?
+    const oreLooseDiceDiv = chatMessageElement.querySelector(".ore-loose-dice"); // Identify loose dice div.
+    const oreLooseMatch = oreLooseDiceDiv.querySelector(`.loose[data-value='${wiggleDieValue}']`); // Which loose dice child matches our wiggle die?
+    if (oreSetMatch) { // If the wiggle die matches a set.
+      const dieImageElement = chatMessageElement.querySelector(`.in-set[data-value='${wiggleDieValue}']`); // Find the image element that matches our wiggle die.
+      const clone = dieImageElement.cloneNode(true); // Clone it
+      dieImageElement.after(clone); // Add it
+    } else if (oreLooseMatch) { // If the wiggle die matches a loose die.
+        let newDiv = ""; // Define the html we want to insert.
+          newDiv += `<div class="ore-set-roll" data-width="2" data-height="${wiggleDieValue}">`;
+          newDiv += `  <div class="ore-single-roll in-set" data-value="${wiggleDieValue}"`;
+          newDiv += `     style="background-image: url('modules/one-roll-engine/images/dice/d10_${wiggleDieValue}.png')">`;
+          newDiv += `  </div>`;
+          newDiv += `<div>`;
+        const setsDiv = chatMessageElement.querySelector(".ore-sets"); // Identify the sets div so that we can put new stuff in it.
+        newDiv = new DOMParser().parseFromString(newDiv, "text/html").body.firstElementChild; // Convert newDiv html string to DOM.
+        setsDiv.append(newDiv); // Add new image to sets.
+
+        // Duplicate the image since the set will by definition have two (we are adding to an existing loose die).
+        const inSetDiv = newDiv.querySelector(".in-set");
+        const clone = inSetDiv.cloneNode(true);
+        inSetDiv.after(clone);
+        oreLooseMatch.remove();
+    } else { // If the wiggle die matches nothing.
+      let newDiv = "";
+        newDiv += `<div class="ore-single-roll loose" data-value="${wiggleDieValue}"`;
+        newDiv += `   style="background-image: url('modules/one-roll-engine/images/dice/d10_loose_${wiggleDieValue}.png')">`;
+        newDiv += `</div>`;
+
+      newDiv = new DOMParser().parseFromString(newDiv, "text/html").body.firstElementChild; // Convert newDiv html string to DOM.
+      oreLooseDiceDiv.append(newDiv);
+    }
+    
+
+    // Handle subtracting current wiggle die every time apply button is clicked.
     let wiggleDieCurrent = event.currentTarget.parentElement.querySelector("span[data-id='wiggleDieCurrent']");
     const updatedWiggleDie = parseInt(wiggleDieCurrent.innerHTML, 10) - 1;
     wiggleDieCurrent.innerHTML = updatedWiggleDie;
+    if (updatedWiggleDie <= 0) {
+      ui.notifications.notify("All wiggle dice applied");
+    }
 
     // Update the chat message so that these changes persist
-    const chatMessageElement = event.currentTarget.closest(".chat-message");
     const chatMessageElementContent = chatMessageElement.querySelector(".one-roll-engine-dice-roll").outerHTML;
     const chatMessageId = chatMessageElement.attributes[1].value;
     const chatMessage = game.messages.get(chatMessageId);

@@ -1,11 +1,12 @@
 <div class="one-roll-engine-dice-roll">
     {{#if flavorPreText}}
     <div class="ore-flavor-text">{{flavorPreText}}</div>
+    <hr>
     {{/if}}
     {{#if wiggleDie}}
     <div class ="ore-wiggle-die">
-        Wiggle Die: <span data-id="wiggleDieCurrent">{{wiggleDie}}</span>/<b>{{wiggleDie}}</b>
-        <select name="wiggleDie">
+        Wiggle Dice: <span data-id="wiggleDieCurrent">{{wiggleDie}}</span>/<b>{{wiggleDie}}</b> - 
+        <select name="wiggleDie" title = "Choose a value">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -16,8 +17,9 @@
             <option>8</option>
             <option>9</option>
             <option>10</option>
-        </select>
-        <span class = "ore-wiggle-apply">Apply</span>
+        </select> - 
+        <span class="ore-wiggle-apply">Apply</span>
+        <br><br>
     </div>
     {{/if}}
     <div class="ore-sets">
@@ -38,6 +40,7 @@
         </div>
         {{/each}}
     </div>
+    <hr>
     {{#if flavorPostText}}
     <div class="ore-flavor-text">{{flavorPostText}}</div>
     {{/if}}
