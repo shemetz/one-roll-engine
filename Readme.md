@@ -6,7 +6,7 @@
 ![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/one-roll-engine/raw/master/module.json)
 
 ## NOTE: This is a fork made specifically for yoshifanx:
- This adds flavor post-text (text displayed after the roll), the ability to reference actor attributes when rolling in chat, and support for wiggle dice. There will also be a couple of sample macros included. This was made under the MIT license.
+ This fork adds flavor post-text (text displayed after the roll), the ability to reference actor attributes when rolling in chat, and support for wiggle dice. There will also be a couple of sample macros included. This was made under the MIT license.
 
 <hr>
 
