@@ -1,15 +1,11 @@
 {
-  "name": "one-roll-engine",
   "id": "one-roll-engine",
   "title": "One Roll Engine",
   "description": "Allows rolling d10s and getting sets, with the /ore command",
-  "author": "shem",
   "version": "0.2.1",
-  "minimumCoreVersion": "0.7.9",
-  "compatibleCoreVersion": "10",
   "compatibility": {
-    "minimum": "0.7.9",
-    "verified": "10"
+    "minimum": "10",
+    "verified": "11"
   },
   "esmodules": [
     "scripts/one_roll_engine.js"
@@ -26,7 +22,7 @@
     {
       "name": "shem",
       "email": "itamarcu+foundry@gmail.com",
-      "discord": "shem#0226",
+      "discord": "shemetz",
       "reddit": "u/Shemetz"
     },
     {
