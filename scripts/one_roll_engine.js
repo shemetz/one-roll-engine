@@ -72,13 +72,11 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
       expertValue = match[4]
     }
   }
-  const roll = await new Roll(`${diceCount}d10`).evaluate()
+  const normalRoll = await new Roll(`${diceCount}d10`).evaluate()
   const expertRoll = await new Roll(`${expertCount}d${expertValue}`).evaluate({ maximize: true })
-
-  const rollResult = parseRawRoll(roll, expertRoll, flavorText)
+  const rollResult = parseRawRoll(normalRoll, expertRoll, flavorText)
   data.content = await getContentFromRollResult(rollResult)
-  data.type = CONST.CHAT_MESSAGE_TYPES.ROLL
-  data.roll = roll
+  data.rolls = expertCount > 0 ? [normalRoll, expertRoll] : [normalRoll]
   data.flags = { core: { canPopout: true } }
   return ChatMessage.create(data, {})
 }
@@ -110,12 +108,13 @@ const errorParsingOreCommand = (messageText) => {
  */
 
 /**
- * @param roll - a Foundry Roll object that has been rolled
+ * @param normalRolls - a Foundry Roll object that has been rolled
+ * @param expertRolls - a Foundry Roll object that has been rolled (even though expert rolls are just maximums)
  * @param {string} flavorText - e.g. "Flaming sword attack"
  * @returns {ORERollResult}
  */
 const parseRawRoll = (normalRolls, expertRolls, flavorText) => {
-  const rawRolls = roll.terms[0].results.map(r => r.result)
+  const rawRolls = normalRolls.terms[0].results.map(r => r.result)
   const rawExpertRolls = expertRolls.terms[0].results.map(r => r.result)
   const counts = new Array(11).fill(0)  // [0, 1, ..., 9, 10].  the 0 is not used
   rawRolls.forEach(k => {
