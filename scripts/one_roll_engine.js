@@ -3,7 +3,6 @@ export const MODULE_NAME = 'one-roll-engine'
 const HOOK_CLICK_SET = 'one-roll-engine clickSet'
 const HOOK_CLICK_LOOSE_DIE = 'one-roll-engine clickLooseDie'
 
-
 /*
  * Parse and roll dice when users type `/ore 6d10` and similar syntax
  */
@@ -133,14 +132,11 @@ const parseRawRoll = (normalRolls, expertRolls, flavorText) => {
   return {
     rawRolls,
     flavorText,
-    sets: Object.entries(sets)
-      .map(s => [parseInt(s[0], 10), s[1]])
-      .sort((s1, s2) => s1[0] - s2[0])
-      .map(s => ({
-        width: s[1],
-        height: s[0],
-        rollsInSet: new Array(s[1]).fill(s[0]),
-      })),
+    sets: Object.entries(sets).map(s => [parseInt(s[0], 10), s[1]]).sort((s1, s2) => s1[0] - s2[0]).map(s => ({
+      width: s[1],
+      height: s[0],
+      rollsInSet: new Array(s[1]).fill(s[0]),
+    })),
     looseDice,
   }
 }
