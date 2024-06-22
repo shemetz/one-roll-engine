@@ -4,8 +4,8 @@
   "description": "Allows rolling d10s and getting sets, with the /ore command",
   "version": "0.2.1",
   "compatibility": {
-    "minimum": "10",
-    "verified": "11"
+    "minimum": "12",
+    "verified": "12"
   },
   "esmodules": [
     "scripts/one_roll_engine.js"

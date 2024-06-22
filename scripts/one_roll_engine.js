@@ -72,7 +72,7 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
       expertValue = match[4]
     }
   }
-  const roll = createRawRoll(diceCount)
+  const roll = await createRawRoll(diceCount)
   const rollResult = parseRawRoll(roll, expertCount, expertValue, flavorText)
   data.content = await getContentFromRollResult(rollResult)
   data.type = CONST.CHAT_MESSAGE_TYPES.ROLL
@@ -99,8 +99,8 @@ const errorParsingOreCommand = (messageText) => {
  *
  * @param {number} diceCount
  */
-const createRawRoll = (diceCount) => {
-  return new Roll(`${diceCount}d10`).roll({ async: false })
+const createRawRoll = async (diceCount) => {
+  return new Roll(`${diceCount}d10`).roll()
 }
 
 /**
