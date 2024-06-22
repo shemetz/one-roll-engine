@@ -72,8 +72,10 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
       expertValue = match[4]
     }
   }
-  const roll = await createRawRoll(diceCount)
-  const rollResult = parseRawRoll(roll, expertCount, expertValue, flavorText)
+  const roll = await new Roll(`${diceCount}d10`).evaluate()
+  const expertRoll = await new Roll(`${expertCount}d${expertValue}`).evaluate({ maximize: true })
+
+  const rollResult = parseRawRoll(roll, expertRoll, flavorText)
   data.content = await getContentFromRollResult(rollResult)
   data.type = CONST.CHAT_MESSAGE_TYPES.ROLL
   data.roll = roll
@@ -88,19 +90,6 @@ const errorParsingOreCommand = (messageText) => {
     <div>Try instead: <p style="font-family: monospace">/ore 7d 6e9 #blah</p></div>`,
   )
   return null
-}
-
-/**
- * returns a Foundry Roll object.
- *
- * To get the array of results:
- *
- * roll.terms[0].results.map(r => r.result)    will returns an array, e.g. [2, 10, 5, 6, 5, 5, 3, 1, 1, 8]
- *
- * @param {number} diceCount
- */
-const createRawRoll = async (diceCount) => {
-  return new Roll(`${diceCount}d10`).roll()
 }
 
 /**
@@ -125,14 +114,14 @@ const createRawRoll = async (diceCount) => {
  * @param {string} flavorText - e.g. "Flaming sword attack"
  * @returns {ORERollResult}
  */
-const parseRawRoll = (roll, expertCount, expertValue, flavorText) => {
+const parseRawRoll = (normalRolls, expertRolls, flavorText) => {
   const rawRolls = roll.terms[0].results.map(r => r.result)
-  const expertRolls = new Roll(`${expertCount}d${expertValue}`).roll({ async: false, maximize: true }).terms[0].results.map(r => r.result)
+  const rawExpertRolls = expertRolls.terms[0].results.map(r => r.result)
   const counts = new Array(11).fill(0)  // [0, 1, ..., 9, 10].  the 0 is not used
   rawRolls.forEach(k => {
     counts[k] += 1
   })
-  expertRolls.forEach(k => {
+  rawExpertRolls.forEach(k => {
     counts[k] += 1
   })
   const sets = {}  // key = height, value = width
@@ -168,7 +157,6 @@ const getContentFromRollResult = async (rollResult) => {
 }
 
 const ORE = {
-  createRawRoll,
   parseRawRoll,
   getContentFromRollResult,
   hooks: {
