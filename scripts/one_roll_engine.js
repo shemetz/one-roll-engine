@@ -57,7 +57,7 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   let match = messageText.match(new RegExp(`^/ore (.*?)(?:\\s*#\\s*([^]+)?)?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const rollPart = match[1], flavorText = match[2]
-  match = rollPart.match(new RegExp(`^([0-9]+)(?:d?1?0?\\s*?)([0-9]+)?([eEhH])?([1-9]|10)?$`))
+  match = rollPart.match(new RegExp(`^([0-9]+)d?(?:10)?\\s*?([0-9]+)?([eEhH])?([1-9]|10)?$`))
   if (!match) return errorParsingOreCommand(messageText)
   const diceCount = match[1]
   let expertCount = 0
