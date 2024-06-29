@@ -38,3 +38,31 @@
     height: 30px;
 }
 
+
+/* inline styles copied from a.inline-roll */
+
+/*noinspection CssUnresolvedCustomProperty*/
+a.ore-inline-roll {
+    background: #DDD;
+    padding: 1px 4px;
+    border: 1px solid var(--color-border-dark-tertiary);
+    border-radius: 2px;
+    white-space: nowrap;
+    word-break: break-all;
+}
+
+/*noinspection CssUnresolvedCustomProperty*/
+a.ore-inline-roll i {
+    color: var(--color-text-dark-inactive);
+    margin-right: 0.25em;
+}
+
+a.ore-inline-roll.gmroll {
+    background: #e8e8ef;
+    border-color: #545469;
+}
+
+a.ore-inline-roll.blindroll {
+    background: #f5eaf5;
+    border-color: #6b476b;
+}

@@ -151,6 +151,48 @@ const getContentFromRollResult = async (rollResult) => {
   })
 }
 
+/**
+ * Parse [[/ore 7 #laser blast]] inline buttons in text
+ */
+Hooks.once('init', () => {
+  CONFIG.TextEditor.enrichers.push({
+    pattern: /\[\[\/ore .*?]]/gi,  // captures [[/ore <anything>]]
+    enricher: inlineRollButton,
+  })
+  // activate listeners
+  $('body').on('click', 'a.ore-inline-roll', onClickInlineRollButton)
+})
+/**
+ * Text enricher that creates a deferred inline roll button.
+ * @param {RegExpMatchArray} match the pattern match for this enricher
+ * @param {EnrichmentOptions} _options the options passed to the enrich function
+ * @returns {HTMLAnchorElement} the deferred inline roll button
+ */
+const inlineRollButton = (match, _options) => {
+  //const normalDice = parseInt(match[1]);
+  //const flavor = match[2]?.slice(1).trim() ?? "";
+  const literal = match[0].slice(2, -2) // remove [[ and ]]
+
+  const a = document.createElement('a')
+  // add classes
+  a.classList.add('ore-inline-roll')
+  // add dataset
+  a.dataset.literal = literal
+  // the text inside
+  a.innerHTML = `<i class="fas fa-dice-d10"></i>${literal}`
+  return a
+}
+
+/**
+ *
+ * @param {Event} event the browser event that triggered this listener
+ */
+const onClickInlineRollButton = (event) => {
+  event.preventDefault()
+  const a = event.currentTarget
+  return rollFromChatMessageOreCommand(a.dataset.literal, {})
+}
+
 const ORE = {
   parseRawRoll,
   getContentFromRollResult,
