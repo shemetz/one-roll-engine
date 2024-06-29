@@ -22,7 +22,7 @@ of the following, to roll 7 dice:
 
 > `/ore 7`
 
-> `/ore 7 #electric dash attack!`
+> `/ore 7d #electric dash attack!`
 
 They will all result in the same thing - a chat message that includes the result of the roll, with dice grouped up to
 sets.
@@ -30,6 +30,11 @@ sets.
 Any text written after the `#`, "flavor text", will also be included.
 
 ![screenshot 2](https://raw.githubusercontent.com/itamarcu/one-roll-engine/master/metadata/screenshot_2_electric_dash_attack.png)
+
+You can also use them as inline roll buttons in text, that can be clicked.  For example:
+> `[[/ore 7d #electric dash attack!]]`
+
+![inline-roll-button.png](images/inline-roll-button.png)
 
 ### Sets
 
@@ -55,9 +60,9 @@ make them go down, by 1 each time, until it goes below 1 and returns to its orig
 
 ### Expert/Hard Dice
 
-Expert/hard dice can be added using the syntax /ore 5d 1e6.
+Expert/hard dice can be added using the syntax /ore Xd XeX.
 
-The 'e' can be replaced with 'E', 'h', or 'H'. If you don't put in the first number (e.g. /ore 5d e1) then the number of dice will default to 1. If you don't put in the second number (e.g. /ore 5d 1e), then the dice will default to 10.
+The 'e' can be replaced with 'E', 'h', or 'H'. If you don't put in the first number (e.g. `/ore 5d e1`) then the number of dice will default to 1. If you don't put in the second number (e.g. /ore 5d 1e), then the dice will default to 10.
 
 The expert/hard dice will be added to the normal roll, becoming part of sets or loose dice as normal.
 

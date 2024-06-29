@@ -2,7 +2,7 @@
   "id": "one-roll-engine",
   "title": "One Roll Engine",
   "description": "Allows rolling d10s and getting sets, with the /ore command",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "compatibility": {
     "minimum": "12",
     "verified": "12"
@@ -10,7 +10,9 @@
   "esmodules": [
     "scripts/one_roll_engine.js"
   ],
-  "styles": ["css/styles.css"],
+  "styles": [
+    "css/styles.css"
+  ],
   "url": "https://github.com/shemetz/one-roll-engine",
   "manifest": "https://github.com/shemetz/one-roll-engine/raw/master/module.json",
   "download": "https://github.com/shemetz/one-roll-engine/archive/master.zip",
