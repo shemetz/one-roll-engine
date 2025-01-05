@@ -41,7 +41,7 @@ Hooks.on('renderChatLog', () => {
       const currentValue = parseInt(looseDieDiv.style.backgroundImage.match(/(\d+)\.png/)[1])
       let newValue = currentValue - 1
       if (newValue === 0) newValue = `loose_${startingValue}`
-      looseDieDiv.style.backgroundImage = `url("modules/one-roll-engine/images/dice/d10_${newValue}.png")`
+      looseDieDiv.style.backgroundImage = `url("modules/one-roll-engine/assets/dice/d10_${newValue}.png")`
     } else {
       looseDieDiv.style.outline = looseDieDiv.style.outline === 'dashed' ? 'none' : 'dashed'
     }

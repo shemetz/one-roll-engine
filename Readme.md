@@ -34,7 +34,7 @@ Any text written after the `#`, "flavor text", will also be included.
 You can also use them as inline roll buttons in text, that can be clicked.  For example:
 > `[[/ore 7d #electric dash attack!]]`
 
-![inline-roll-button.png](images/inline-roll-button.png)
+![inline-roll-button.png](assets/inline-roll-button.png)
 
 ### Sets
 
