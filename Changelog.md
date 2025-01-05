@@ -1,3 +1,6 @@
+## 0.2.6 - 2025-01-06
+- Fixed previous release being broken
+
 ## 0.2.5 - 2025-01-03
 - Improved github workflow automation
 
