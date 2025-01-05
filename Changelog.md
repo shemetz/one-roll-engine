@@ -1,4 +1,4 @@
-## 0.2.7 - 2025-01-06
+## 0.2.8 - 2025-01-06
 - Fixed previous release being broken
 
 ## 0.2.5 - 2025-01-03
