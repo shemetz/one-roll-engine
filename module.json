@@ -11,7 +11,7 @@
     "scripts/one_roll_engine.js"
   ],
   "styles": [
-    "css/styles.css"
+    "styles/styles.css"
   ],
   "url": "https://github.com/shemetz/one-roll-engine",
   "manifest": "https://github.com/shemetz/one-roll-engine/raw/master/module.json",
