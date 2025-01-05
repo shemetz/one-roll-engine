@@ -146,7 +146,7 @@ const parseRawRoll = (normalRolls, expertRolls, flavorText) => {
  */
 const getContentFromRollResult = async (rollResult) => {
   const { sets, looseDice, flavorText } = rollResult
-  return await renderTemplate(`modules/one-roll-engine/templates/ore-roll.html`, {
+  return await renderTemplate(`modules/one-roll-engine/scripts/ore-roll.html`, {
     sets, looseDice, flavorText,
   })
 }
