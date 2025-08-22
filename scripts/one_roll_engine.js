@@ -19,7 +19,7 @@ Hooks.on('chatMessage', (_, messageText, data) => {
  * Toggle dashed outline of sets, when clicked
  */
 Hooks.on('renderChatLog', () => {
-  const chatLog = $('#chat-log')
+  const chatLog = $('.chat-log')
   chatLog.on('click', '.ore-set-roll', (event) => {
     event.preventDefault()
     const setsDiv = event.currentTarget
@@ -146,7 +146,7 @@ const parseRawRoll = (normalRolls, expertRolls, flavorText) => {
  */
 const getContentFromRollResult = async (rollResult) => {
   const { sets, looseDice, flavorText } = rollResult
-  return await renderTemplate(`modules/one-roll-engine/scripts/ore-roll.html`, {
+  return await foundry.applications.handlebars.renderTemplate(`modules/one-roll-engine/scripts/ore-roll.html`, {
     sets, looseDice, flavorText,
   })
 }
