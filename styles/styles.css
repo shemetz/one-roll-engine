@@ -1,3 +1,7 @@
+.one-roll-engine-dice-roll {
+    margin: 4px;
+}
+
 .one-roll-engine-dice-roll .ore-flavor-text {
     color: #444;
     font-size: 120%;
@@ -14,6 +18,7 @@
 .one-roll-engine-dice-roll .ore-loose-dice {
     display: inline-flex;
     vertical-align: super;
+    gap: 3px;
 }
 
 .one-roll-engine-dice-roll .ore-single-roll {
