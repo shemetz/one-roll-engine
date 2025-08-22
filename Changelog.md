@@ -1,3 +1,6 @@
+## 0.2.9 - 2025-08-22
+- Foundry V13 release
+
 ## 0.2.8 - 2025-01-06
 - Fixed previous release being broken
 
