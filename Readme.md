@@ -6,8 +6,11 @@
 ![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/one-roll-engine/raw/master/module.json)
 
 One Roll Engine is a Foundry VTT module, based on the [One-Roll Engine](https://en.wikipedia.org/wiki/One-Roll_Engine) (O.R.E) 
-generic TTRPG system.  This basic system is used for games such as Wild Talents, Monsters and Other Childish Things, 
+generic TTRPG system.  ORE is used for games such as Wild Talents, Monsters and Other Childish Things, 
 and The Velvet Book. 
+
+This module is very barebones, it only provides you with the ability to roll dice and see sets;  there's no actual
+game system built on top of it, no sheets or anything like that.
 
 #### [Changelog](https://github.com/itamarcu/one-roll-engine/blob/master/Changelog.md)
 
