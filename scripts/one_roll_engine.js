@@ -4,18 +4,6 @@ const HOOK_CLICK_SET = 'one-roll-engine clickSet'
 const HOOK_CLICK_LOOSE_DIE = 'one-roll-engine clickLooseDie'
 
 /*
- * Parse and roll dice when users type `/ore 6d10` and similar syntax
- */
-Hooks.on('chatMessage', (_, messageText, data) => {
-  if (messageText !== undefined && messageText.startsWith(`/ore`)) {
-    rollFromChatMessageOreCommand(messageText, data)
-    return false
-  } else {
-    return true
-  }
-})
-
-/*
  * Toggle dashed outline of sets, when clicked
  */
 Hooks.on('renderChatLog', () => {
@@ -77,7 +65,8 @@ const rollFromChatMessageOreCommand = async (messageText, data) => {
   data.content = await getContentFromRollResult(rollResult)
   data.rolls = expertCount > 0 ? [normalRoll, expertRoll] : [normalRoll]
   data.flags = { core: { canPopout: true } }
-  return ChatMessage.create(data, {})
+  ChatMessage.create(data, {})
+  return false
 }
 
 const errorParsingOreCommand = (messageText) => {
@@ -151,12 +140,15 @@ const getContentFromRollResult = async (rollResult) => {
   })
 }
 
-/**
- * Parse [[/ore 7 #laser blast]] inline buttons in text
- */
 Hooks.once('init', () => {
+  /** parse /ore commands in chat */
+  foundry.applications.sidebar.tabs.ChatLog.CHAT_COMMANDS.ore = {
+    rgx: /\/ore .*/gi,  // captures    /ore <anything>
+    fn: (_command, match, chatData, _createOptions) => rollFromChatMessageOreCommand(match[0], chatData)
+  }
+  /** Parse [[/ore 7 #laser blast]] inline buttons in text documents (embedded) */
   CONFIG.TextEditor.enrichers.push({
-    pattern: /\[\[\/ore .*?]]/gi,  // captures [[/ore <anything>]]
+    pattern: /\[\[\/ore .*?]]/gi,  // captures    [[/ore <anything>]]
     enricher: inlineRollButton,
   })
   // activate listeners
